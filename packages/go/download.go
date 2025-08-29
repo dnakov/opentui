@@ -18,51 +18,31 @@ var (
 
 func init() {
 	downloadOnce.Do(func() {
-		downloadErr = ensureAssets()
+		downloadErr = ensureLibraries()
 	})
 	if downloadErr != nil {
-		panic(fmt.Sprintf("Failed to download OpenTUI assets: %v", downloadErr))
+		panic(fmt.Sprintf("Failed to download OpenTUI libraries: %v", downloadErr))
 	}
 }
 
-func ensureAssets() error {
-	// Get the directory where this package is located
+func ensureLibraries() error {
 	_, filename, _, _ := runtime.Caller(0)
 	packageDir := filepath.Dir(filename)
 	
-	headerPath := filepath.Join(packageDir, "opentui.h")
-	if _, err := os.Stat(headerPath); err == nil {
-		// Assets already exist
+	platform := getCurrentPlatform()
+	libPath := filepath.Join(packageDir, "lib", platform, getLibraryFileName(platform))
+	
+	if _, err := os.Stat(libPath); err == nil {
 		return nil
 	}
 
-	// Download assets
 	const repoURL = "https://github.com/dnakov/opentui/releases/download"
 	
-	// Create lib directory structure
-	platforms := []string{
-		"aarch64-linux", "aarch64-macos", "aarch64-windows",
-		"x86_64-linux", "x86_64-macos", "x86_64-windows",
+	if err := os.MkdirAll(filepath.Dir(libPath), 0755); err != nil {
+		return fmt.Errorf("failed to create lib directory: %v", err)
 	}
 
-	for _, platform := range platforms {
-		libDir := filepath.Join(packageDir, "lib", platform)
-		if err := os.MkdirAll(libDir, 0755); err != nil {
-			return fmt.Errorf("failed to create directory %s: %v", libDir, err)
-		}
-	}
-
-	// Download header file
-	headerURL := fmt.Sprintf("%s/latest/download/opentui.h", repoURL)
-	if err := downloadFile(headerPath, headerURL); err != nil {
-		return fmt.Errorf("failed to download header: %v", err)
-	}
-
-	// Download current platform's library
-	platform := getCurrentPlatform()
 	libURL := fmt.Sprintf("%s/latest/download/%s", repoURL, getLibraryAssetName(platform))
-	libPath := filepath.Join(packageDir, "lib", platform, getLibraryFileName(platform))
-	
 	if err := downloadFile(libPath, libURL); err != nil {
 		return fmt.Errorf("failed to download library for %s: %v", platform, err)
 	}
@@ -79,11 +59,6 @@ func downloadFile(filePath, url string) error {
 
 	if resp.StatusCode != 200 {
 		return fmt.Errorf("HTTP %d downloading %s", resp.StatusCode, url)
-	}
-
-	dir := filepath.Dir(filePath)
-	if err := os.MkdirAll(dir, 0755); err != nil {
-		return err
 	}
 
 	out, err := os.Create(filePath)

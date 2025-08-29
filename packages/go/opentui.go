@@ -1,6 +1,5 @@
 package opentui
 
-
 /*
 #cgo CFLAGS: -I${SRCDIR}
 #cgo darwin,arm64 LDFLAGS: -L${SRCDIR}/lib/aarch64-macos -lopentui -Wl,-rpath,${SRCDIR}/lib/aarch64-macos
