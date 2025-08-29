@@ -1,3 +1,3 @@
-module github.com/sst/opentui/packages/go
+module github.com/dnakov/opentui/packages/go
 
 go 1.21

@@ -37,7 +37,7 @@ func ensureAssets() error {
 	}
 
 	// Download assets
-	const repoURL = "https://github.com/sst/opentui/releases/download"
+	const repoURL = "https://github.com/dnakov/opentui/releases/download"
 	
 	// Create lib directory structure
 	platforms := []string{
