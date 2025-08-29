@@ -147,15 +147,6 @@ fn buildTargetFromQuery(
     build_step.dependOn(&install_dir.step);
 
     b.getInstallStep().dependOn(&install_dir.step);
-    
-    // Copy header to Go package on first target build
-    if (std.mem.eql(u8, target_name, "aarch64-macos") or std.mem.eql(u8, target_name, "x86_64-macos")) {
-        const copy_header = b.addSystemCommand(&[_][]const u8{
-            "cp", "opentui.h", "../../go/opentui.h"
-        });
-        copy_header.step.dependOn(&install_dir.step);
-        b.getInstallStep().dependOn(&copy_header.step);
-    }
 }
 
 fn createTargetName(allocator: std.mem.Allocator, target: std.Target) ![]u8 {
