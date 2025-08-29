@@ -62,8 +62,10 @@ jobs:
         run: |
           mkdir -p release-assets
           
-          # Copy header file
+          # Copy header file and install script
           cp packages/core/src/zig/opentui.h release-assets/
+          cp install.sh release-assets/
+          cp opentui.pc.in release-assets/
           
           # Copy libraries with proper naming
           for target in x86_64-linux aarch64-linux x86_64-macos aarch64-macos x86_64-windows aarch64-windows; do
