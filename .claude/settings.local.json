@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git rebase:*)",
+      "Bash(zig run:*)",
+      "Bash(/opt/homebrew/bin/zig run:*)",
+      "Bash(go build:*)",
+      "Bash(go test:*)",
+      "Bash(/opt/homebrew/bin/zig build)",
+      "Bash(git add:*)",
+      "Bash(git reset:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
