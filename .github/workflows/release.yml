@@ -13,16 +13,12 @@ jobs:
         include:
           - os: ubuntu-latest
             target: x86_64-linux
-          - os: ubuntu-latest 
-            target: aarch64-linux
-          - os: macos-latest
-            target: x86_64-macos
+          - os: macos-13
+            target: x86_64-macos  
           - os: macos-latest
             target: aarch64-macos
           - os: windows-latest
             target: x86_64-windows
-          - os: windows-latest
-            target: aarch64-windows
 
     runs-on: ${{ matrix.os }}
     
@@ -32,12 +28,12 @@ jobs:
       - name: Setup Zig
         uses: goto-bus-stop/setup-zig@v2
         with:
-          version: 0.14.0
+          version: 0.14.1
           
       - name: Build Zig library
         run: |
           cd packages/core/src/zig
-          zig build -Doptimize=ReleaseFast -Dtarget=${{ matrix.target }}
+          zig build -Doptimize=ReleaseFast
           
       - name: Upload library artifact
         uses: actions/upload-artifact@v4
@@ -68,17 +64,17 @@ jobs:
           cp opentui.pc.in release-assets/
           
           # Copy libraries with proper naming
-          for target in x86_64-linux aarch64-linux x86_64-macos aarch64-macos x86_64-windows aarch64-windows; do
-            if [ -d "artifacts/library-$target/$target" ]; then
+          for target in x86_64-linux x86_64-macos aarch64-macos x86_64-windows; do
+            if [ -d "artifacts/library-$target" ]; then
               case $target in
                 *-linux)
-                  cp artifacts/library-$target/$target/libopentui.so release-assets/libopentui-$target.so
+                  find artifacts/library-$target -name "*.so" -exec cp {} release-assets/libopentui-$target.so \;
                   ;;
                 *-macos)  
-                  cp artifacts/library-$target/$target/libopentui.dylib release-assets/libopentui-$target.dylib
+                  find artifacts/library-$target -name "*.dylib" -exec cp {} release-assets/libopentui-$target.dylib \;
                   ;;
                 *-windows)
-                  cp artifacts/library-$target/$target/opentui.dll release-assets/opentui-$target.dll
+                  find artifacts/library-$target -name "*.dll" -exec cp {} release-assets/opentui-$target.dll \;
                   ;;
               esac
             fi

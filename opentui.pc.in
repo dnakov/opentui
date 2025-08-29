@@ -5,5 +5,5 @@ includedir=${prefix}/include
 Name: OpenTUI
 Description: High-performance terminal user interface library
 Version: @VERSION@
-Libs: -L${libdir} -lopentui
+Libs: -L${libdir} -lopentui -Wl,-rpath,${libdir}
 Cflags: -I${includedir}
