@@ -1,15 +1,8 @@
 package opentui
 
 /*
-#cgo CFLAGS: -I${SRCDIR}
-#cgo darwin,arm64 LDFLAGS: -L${SRCDIR}/lib/aarch64-macos -lopentui -Wl,-rpath,${SRCDIR}/lib/aarch64-macos
-#cgo darwin,amd64 LDFLAGS: -L${SRCDIR}/lib/x86_64-macos -lopentui -Wl,-rpath,${SRCDIR}/lib/x86_64-macos
-#cgo linux,amd64 LDFLAGS: -L${SRCDIR}/lib/x86_64-linux -lopentui -Wl,-rpath,${SRCDIR}/lib/x86_64-linux
-#cgo linux,arm64 LDFLAGS: -L${SRCDIR}/lib/aarch64-linux -lopentui -Wl,-rpath,${SRCDIR}/lib/aarch64-linux
-#cgo windows,amd64 LDFLAGS: -L${SRCDIR}/lib/x86_64-windows -lopentui
-#cgo windows,arm64 LDFLAGS: -L${SRCDIR}/lib/aarch64-windows -lopentui
-
-#include "opentui.h"
+#cgo pkg-config: opentui
+#include <opentui.h>
 #include <stdlib.h>
 */
 import "C"
